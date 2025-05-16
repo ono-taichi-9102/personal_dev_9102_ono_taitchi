@@ -5,7 +5,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 @Component
 @SessionScope
-public class User {
+public class Account {
 
 	private String name;
 

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>新規作成</title>
+</head>
+<body>
+	<header th:replace="header"></header>
+	<form action="/users/add" method="post">
+			<input type="text" name="name" placeholder="ユーザー名"><br>
+			<input type="text" name="password" placeholder="パスワード"><br>
+			<button>新規作成</button>
+		</form>
+</body>
+</html>

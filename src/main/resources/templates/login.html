@@ -2,21 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>ログイン</title>
-<link rel="stylesheet" type="text/css" href="/css/style.css">
+<title>ToDoリスト</title>
 </head>
 <body>
-	<header>
-		<h1>サンプルショッピング</h1>
-	</header>
-	<form action="/login" method="post">
-		<input type="text" name="email" placeholder="メールアドレス">
-		<br>
-		<input type="text" name="password" placeholder="パスワード">
-		<br>
+	<h1>ToDoリスト</h1>
+	<form action="/users/login" method="post">
+		<input type="text" name="name" placeholder="ユーザー名"><br>
+		<input type="text" name="password" placeholder="パスワード"><br>
 		<button>ログイン</button>
 	</form>
-	<br>
-		<a href="/account">新規会員登録はこちら</a>
+	<a href="/users/create">ユーザー新規作成</a>
 </body>
 </html>

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.User;
+import com.example.demo.model.Account;
 import com.example.demo.repository.UserRepository;
 
 @Controller
@@ -20,31 +21,48 @@ public class UserController {
 	HttpSession session;
 
 	@Autowired
-	User user;
+	Account account;
 
 	@Autowired
 	UserRepository userRepository;
 
 	//ログイン画面の表示
-	@GetMapping("/users/create")
-	public String createAccount() {
-		return "users";
+	@GetMapping("/users/login")
+	public String loginView() {
+		return "login";
+	}
+
+	@GetMapping("/users/logout")
+	public String logout() {
+		return "login";
 	}
 
 	//ログインを実行
+	@PostMapping("/users/login")
+	public String login(
+			@RequestParam("name") String name,
+			@RequestParam("password") String password,
+			Model model) {
+
+		account.setName(name);
+
+		return "redirect:/tasks";
+	}
+
+	@GetMapping("/users/create")
+	public String createAccount1() {
+		return "createUser";
+	}
+
 	@PostMapping("/users/add")
 	public String addAccount(
 			@RequestParam("name") String name,
 			@RequestParam("password") String password,
 			Model model) {
 
-		if (name == null || name.length() == 0) {
-			model.addAttribute("message", "名前を入力してください");
-			return "login";
-		}
+		User user = new User(name, password);
+		userRepository.save(user);
 
-		user.setName(name);
-
-		return "tasks";
+		return "login";
 	}
 }

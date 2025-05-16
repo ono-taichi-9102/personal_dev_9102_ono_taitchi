@@ -6,5 +6,40 @@
 </head>
 <body>
 	<header th:replace="header"></header>
+	<div>
+		[[${@account.name}]]さんがログイン中
+		<a href="/users/logout">ログアウト</a>
+	</div>
+		<a href="/tasks">全タスク</a>
+			<a th:each="category:${categories}"
+				th:href="@{/tasks(categoryId=${category.id})}"
+				th:text="${category.name}"
+				style="margin-right: 5px;"></a>
+			<a href="/tasks" style="padding-left: 10px;"></a>
+			
+			<a href="/tasks/createTask">新規作成</a>
+			
+			<table border="1">
+				<tr>
+				<th>NO</th>
+				<th>タイトル</th>
+				<th>カテゴリー</th>
+				<th>期限</th>
+				<th>進捗状況</th>
+				<th>変更</th>
+				<th>削除</th>
+				</tr>
+				<tr th:each="task:${taskList}">
+					<td th:text="${task.id}"></td>
+					<td th:text="${task.title}"></td>
+					<td th:text="${task.categoryId}"></td>
+					<td th:text="${task.closingDate}"></td>
+					<td th:text="${task.progress}"></td>
+					<td th:text="${task.memo}"></td>
+				</tr>
+			</table>
+			
+			
+			
 </body>
 </html>
