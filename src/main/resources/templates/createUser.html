@@ -3,13 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <title>新規作成</title>
+<link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
 	<header th:replace="header"></header>
 	<form action="/users/add" method="post">
+		<ul>
+			<li th:each="error:${errorList}" th:text="${error}"></li>
+		</ul>
 			<input type="text" name="name" placeholder="ユーザー名"><br>
 			<input type="text" name="password" placeholder="パスワード"><br>
 			<button>新規作成</button>
 		</form>
+	<a href="/users/login">ログイン</a>
 </body>
 </html>

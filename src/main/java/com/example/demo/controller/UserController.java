@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,9 @@ import com.example.demo.repository.UserRepository;
 @Controller
 
 public class UserController {
+
+	//	@Autowired
+	//	User user;
 
 	@Autowired
 	HttpSession session;
@@ -44,8 +50,25 @@ public class UserController {
 			@RequestParam("password") String password,
 			Model model) {
 
-		account.setName(name);
+		List<String> errorList = new ArrayList<>();
 
+		if (name.equals("")) {
+			errorList.add("名前は必須です");
+		}
+		if (password.equals("")) {
+			errorList.add("パスワードは必須です");
+		}
+
+		if (!errorList.isEmpty()) {
+			model.addAttribute("errorList", errorList);
+			return "login";
+		}
+		List<User> userList = userRepository.findByNameAndPassword(name, password);
+		User user = userList.get(0);
+
+		account.setName(name);
+		account.setPassword(password);
+		account.setId(user.getId());
 		return "redirect:/tasks";
 	}
 
@@ -60,6 +83,25 @@ public class UserController {
 			@RequestParam("password") String password,
 			Model model) {
 
+		List<String> errorList = new ArrayList<>();
+
+		if (name.equals("")) {
+			errorList.add("名前は必須です");
+		}
+		if (password.equals("")) {
+			errorList.add("パスワードは必須です");
+		}
+
+		List<User> userList = userRepository.findByName(name);
+
+		if (!userList.isEmpty()) {
+			errorList.add("登録済みです");
+		}
+
+		if (!errorList.isEmpty()) {
+			model.addAttribute("errorList", errorList);
+			return "createUser";
+		}
 		User user = new User(name, password);
 		userRepository.save(user);
 

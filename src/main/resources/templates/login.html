@@ -3,10 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>ToDoリスト</title>
+<link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
 	<h1>ToDoリスト</h1>
 	<form action="/users/login" method="post">
+		<ul>
+			<li th:each="error:${errorList}" th:text="${error}"></li>
+		</ul>
 		<input type="text" name="name" placeholder="ユーザー名"><br>
 		<input type="text" name="password" placeholder="パスワード"><br>
 		<button>ログイン</button>

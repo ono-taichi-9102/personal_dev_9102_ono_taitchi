@@ -21,6 +21,10 @@ public class User {
 
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
 	public User(String name, String password) {
 		this.name = name;
 		this.password = password;
