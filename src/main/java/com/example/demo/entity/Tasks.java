@@ -30,8 +30,10 @@ public class Tasks {
 
 	}
 
-	public Tasks(Integer categoryId, String title, LocalDate closingDate, Integer progress, String memo) {
+	public Tasks(Integer categoryId, Integer userId, String title, LocalDate closingDate, Integer progress,
+			String memo) {
 		this.categoryId = categoryId;
+		this.userId = userId;
 		this.title = title;
 		this.closingDate = closingDate;
 		this.progress = progress;
@@ -44,6 +46,10 @@ public class Tasks {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Integer getUserId() {
+		return userId;
 	}
 
 	public Integer getProgress() {
@@ -76,14 +82,6 @@ public class Tasks {
 
 	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
-	}
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
 	}
 
 	public LocalDate getClosingDate() {

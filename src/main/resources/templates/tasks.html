@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>タスク一覧</title>
+<link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
 	<header th:replace="header"></header>
@@ -26,20 +27,36 @@
 				<th>カテゴリー</th>
 				<th>期限</th>
 				<th>進捗状況</th>
+				<th>メモ</th>
 				<th>変更</th>
 				<th>削除</th>
 				</tr>
-				<tr th:each="task:${taskList}">
+				<tr th:each="task:${tasks}">
 					<td th:text="${task.id}"></td>
 					<td th:text="${task.title}"></td>
-					<td th:text="${task.categoryId}"></td>
+					
+					<td th:if="${task.categoryId} == 1">仕事</td>
+					<td th:if="${task.categoryId} == 2">個人</td>
+					<td th:if="${task.categoryId} == 3">その他</td>
+					
 					<td th:text="${task.closingDate}"></td>
-					<td th:text="${task.progress}"></td>
+					
+					<td><span th:if="${task.progress} == 1">未着手</span>
+						<span th:if="${task.progress} == 2">進行中</span>
+						<span th:if="${task.progress} == 3">完了</span></td>
+					
 					<td th:text="${task.memo}"></td>
+					
+					<td>
+						<form th:action="@{/tasks/{taskId}/edit(taskId=${task.id})}"method="get">
+							<button>変更</button>
+						</form>
+					</td>
+					<td>
+						<form th:action="@{/tasks/{taskId}/delete(taskId=${task.id})}"method="post">
+						<button>削除</button>
+					</td>
 				</tr>
 			</table>
-			
-			
-			
-</body>
+	</body>
 </html>
