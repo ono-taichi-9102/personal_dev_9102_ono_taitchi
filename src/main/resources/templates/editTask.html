@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <title>タスク変更</title>
 <link rel="stylesheet" type="text/css" href="/css/style.css">
+
+<script type="text/javascript">
+  function editConfirm(){
+      var checked = confirm("この内容で変更しますか？");
+      if (checked == true) {
+          return true;
+      } else {
+          return false;
+      }
+  }
+</script>
 </head>
 <body>
 	<h1>タスク変更</h1>
@@ -43,7 +54,7 @@
 				<td><textarea name="memo" rows="10" th:value="${task.memo}" th:text="${task.memo}"></textarea></td>
 			</tr>
 		</table>
-		<button>変更</button>
+		<button onclick="return editConfirm()">変更</button>
 	</form>
 </body>
 </html>
