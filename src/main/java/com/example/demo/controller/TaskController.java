@@ -33,20 +33,60 @@ public class TaskController {
 	@GetMapping("/tasks")
 	public String index(
 			@RequestParam(name = "categoryId", defaultValue = "") Integer categoryId,
+			@RequestParam(name = "keyword", defaultValue = "") String keyword,
 			Model model) {
 
+		model.addAttribute("keyword", keyword);
 		List<Category> categoryList = categoryRepository.findAll();
 		model.addAttribute("categories", categoryList);
 
 		List<Tasks> taskList = null;
-		if (categoryId == null) {
+		if (categoryId == null && keyword.equals("")) {
 			taskList = taskRepository.findByUserId(account.getId());
 		} else {
 			taskList = taskRepository.findByUserIdAndCategoryId(account.getId(), categoryId);
 		}
-		model.addAttribute("tasks", taskList);
+		if (!(keyword.equals(""))) {
+			taskList = taskRepository.findByUserIdAndTitleLike(account.getId(), "%" + keyword + "%");
+		}
+		model.addAttribute("taskList", taskList);
+
+		taskList.removeIf(t -> t.getProgress() == 3);
 
 		return "tasks";
+	}
+
+	@GetMapping("/tasks/complete")
+	public String showcompleteTasks(
+			@RequestParam(name = "categoryId", defaultValue = "") Integer categoryId,
+			@RequestParam(name = "keyword", defaultValue = "") String keyword,
+			Model model) {
+		model.addAttribute("keyword", keyword);
+		List<Category> categoryList = categoryRepository.findAll();
+		model.addAttribute("categories", categoryList);
+
+		List<Tasks> taskList = null;
+		if (categoryId == null && keyword.equals("")) {
+			taskList = taskRepository.findByUserId(account.getId());
+		} else {
+			taskList = taskRepository.findByUserIdAndCategoryId(account.getId(), categoryId);
+		}
+		if (!(keyword.equals(""))) {
+			taskList = taskRepository.findByUserIdAndTitleLike(account.getId(), "%" + keyword + "%");
+		}
+		model.addAttribute("taskList", taskList);
+
+		return "completeTask";
+	}
+
+	@PostMapping("/tasks/{id}/complete")
+	public String completeTasks(@PathVariable("id") Integer id,
+			Model model) {
+		Tasks task = taskRepository.findById(id).get();
+		task.setProgress(3);
+		taskRepository.save(task);
+		model.addAttribute("task", task);
+		return "redirect:/tasks";
 	}
 
 	@GetMapping("/tasks/createTask")
@@ -57,10 +97,10 @@ public class TaskController {
 	@PostMapping("/tasks/createTask")
 	public String createAdd(
 			@RequestParam(name = "categoryId", defaultValue = "99") Integer categoryId,
-			@RequestParam("title") String title,
+			@RequestParam(name = "title", defaultValue = "") String title,
 			@RequestParam(name = "closingDate", defaultValue = "") LocalDate closingDate,
-			@RequestParam("progress") Integer progress,
-			@RequestParam("memo") String memo,
+			@RequestParam(name = "progress", defaultValue = "100") Integer progress,
+			@RequestParam(name = "memo", defaultValue = "") String memo,
 			Model model) {
 
 		List<String> errorList = new ArrayList<>();
@@ -70,8 +110,11 @@ public class TaskController {
 		if (title.equals("")) {
 			errorList.add("タイトルが未入力です");
 		}
-		if (progress == null) {
-			errorList.add("進捗状況を選択してください");
+		if (closingDate == null) {
+			errorList.add("期限が未入力です");
+		}
+		if (progress == 100) {
+			errorList.add("進捗状況が未入力です");
 		}
 		if (!errorList.isEmpty()) {
 			model.addAttribute("errorList", errorList);
@@ -97,12 +140,30 @@ public class TaskController {
 	@PostMapping("/tasks/{id}/edit")
 	public String update(
 			@PathVariable("id") Integer id,
-			@RequestParam("categoryId") Integer categoryId,
+			@RequestParam(name = "categoryId", defaultValue = "99") Integer categoryId,
 			@RequestParam("title") String title,
-			@RequestParam("progress") Integer progress,
-			@RequestParam("closingDate") LocalDate closingDate,
+			@RequestParam(name = "progress", defaultValue = "100") Integer progress,
+			@RequestParam(name = "closingDate", defaultValue = "") LocalDate closingDate,
 			@RequestParam("memo") String memo,
 			Model model) {
+
+		List<String> errorList = new ArrayList<>();
+		if (categoryId == 99) {
+			errorList.add("カテゴリーを選択してください");
+		}
+		if (title.equals("")) {
+			errorList.add("タイトルが未入力です");
+		}
+		if (closingDate == null) {
+			errorList.add("期限が未入力です");
+		}
+		if (progress == 100) {
+			errorList.add("進捗状況が未入力です");
+		}
+		if (!errorList.isEmpty()) {
+			model.addAttribute("errorList", errorList);
+			return "editTask";
+		}
 
 		Tasks task = taskRepository.findById(id).get();
 		task.setCategoryId(categoryId);

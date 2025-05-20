@@ -1,62 +1,77 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>タスク一覧</title>
-<link rel="stylesheet" type="text/css" href="/css/style.css">
+	<meta charset="UTF-8">
+	<title>タスク一覧</title>
+	<link rel="stylesheet" type="text/css" href="/css/style.css">
+	<script type="text/javascript">
+		function deleteConfirm() {
+			var checked = confirm("削除します");
+			if (checked == true) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	</script>
 </head>
-<body>
-	<header th:replace="header"></header>
-	<div>
-		[[${@account.name}]]さんがログイン中
-		<a href="/users/logout">ログアウト</a>
-	</div>
-		<a href="/tasks">全タスク</a>
-			<a th:each="category:${categories}"
-				th:href="@{/tasks(categoryId=${category.id})}"
-				th:text="${category.name}"
-				style="margin-right: 5px;"></a>
-			<a href="/tasks" style="padding-left: 10px;"></a>
-			
-			<a href="/tasks/createTask">新規作成</a>
-			
-			<table border="1">
-				<tr>
-				<th>NO</th>
-				<th>タイトル</th>
-				<th>カテゴリー</th>
-				<th>期限</th>
-				<th>進捗状況</th>
-				<th>メモ</th>
-				<th>変更</th>
-				<th>削除</th>
-				</tr>
-				<tr th:each="task:${tasks}">
-					<td th:text="${task.id}"></td>
-					<td th:text="${task.title}"></td>
-					
-					<td th:if="${task.categoryId} == 1">仕事</td>
-					<td th:if="${task.categoryId} == 2">個人</td>
-					<td th:if="${task.categoryId} == 3">その他</td>
-					
-					<td th:text="${task.closingDate}"></td>
-					
-					<td><span th:if="${task.progress} == 1">未着手</span>
-						<span th:if="${task.progress} == 2">進行中</span>
-						<span th:if="${task.progress} == 3">完了</span></td>
-					
-					<td th:text="${task.memo}"></td>
-					
-					<td>
-						<form th:action="@{/tasks/{taskId}/edit(taskId=${task.id})}"method="get">
-							<button>変更</button>
-						</form>
-					</td>
-					<td>
-						<form th:action="@{/tasks/{taskId}/delete(taskId=${task.id})}"method="post">
-						<button>削除</button>
-					</td>
-				</tr>
-			</table>
-	</body>
+<header th:replace="header"></header>
+<div>
+	[[${@account.name}]]さんがログイン中
+	<a href="/users/logout">ログアウト</a>
+</div>
+<a href="/tasks">全タスク</a>
+<a th:each="category:${categories}" th:href="@{/tasks(categoryId=${category.id})}" th:text="${category.name}"
+	style="margin-right: 5px;"></a>
+<a href="/tasks" style="padding-left: 10px;"></a>
+
+<a href="/tasks/complete">完了済み</a>
+
+<form action="/tasks" method="get">
+	<input type="text" name="keyword" placeholder="キーワード" th:value="${keyword}"> |
+	<button>検索</button>
+</form>
+<a href="/tasks/createTask">新規作成</a>
+<table border="1">
+	<tr>
+		<th>NO</th>
+		<th>タイトル</th>
+		<th>カテゴリー</th>
+		<th>期限</th>
+		<th>進捗状況</th>
+		<th>メモ</th>
+		<th>変更</th>
+		<th>削除</th>
+		<th>完了</th>
+	</tr>
+	<tr th:each="task:${taskList}">
+		<td th:text="${task.id}"></td>
+		<td th:text="${task.title}"></td>
+		<td th:if="${task.categoryId} == 1">仕事</td>
+		<td th:if="${task.categoryId} == 2">個人</td>
+		<td th:if="${task.categoryId} == 3">その他</td>
+		<td th:text="${task.closingDate}"></td>
+		<td><span th:if="${task.progress} == 1">未着手</span>
+			<span th:if="${task.progress} == 2">進行中</span>
+			<span th:if="${task.progress} == 3">完了</span>
+		</td>
+		<td th:text="${task.memo}"></td>
+		<td>
+			<form th:action="@{/tasks/{taskId}/edit(taskId=${task.id})}" method="get">
+				<button>変更</button>
+			</form>
+		</td>
+		<td>
+			<form th:action="@{/tasks/{taskId}/delete(taskId=${task.id})}" method="post">
+				<button onclick="return deleteConfirm()">削除</button>
+			</form>
+		</td>
+		<td>
+			<form th:action="@{/tasks/{taskId}/complete(taskId=${task.id})}" method="post">
+				<button>完了</button>
+			</form>
+		</td>
+	</tr>
+</table>
+</body>
 </html>
