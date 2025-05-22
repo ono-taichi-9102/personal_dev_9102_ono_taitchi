@@ -30,7 +30,7 @@ public class Tasks {
 
 	}
 
-	public Tasks(Integer categoryId, Integer userId, String title, LocalDate closingDate, Integer progress,
+	public Tasks(Integer userId, Integer categoryId, String title, LocalDate closingDate, Integer progress,
 			String memo) {
 		this.categoryId = categoryId;
 		this.userId = userId;
@@ -90,6 +90,11 @@ public class Tasks {
 
 	public void setClosingDate(LocalDate closingDate) {
 		this.closingDate = closingDate;
+	}
+
+	public void setUserId(Integer id) {
+		// TODO 自動生成されたメソッド・スタブ
+
 	}
 
 }
