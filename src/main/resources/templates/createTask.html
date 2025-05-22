@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>新規作成</title>
+<title>個人タスク新規作成</title>
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
@@ -16,29 +16,29 @@
 		<table border="1">
 			<tr>
 				<th>カテゴリー</th>
-				<td><input type="radio" id="category1" name="categoryId" value="1">仕事
-					<input type="radio"	id="category2" name="categoryId" value="2">個人
-					<input type="radio"	id="category3" name="categoryId" value="3">その他
+				<td><input type="radio" id="category1" name="categoryId" value="1" th:checked="${categoryId}==1">仕事
+					<input type="radio"	id="category2" name="categoryId" value="2" th:checked="${categoryId}==2">個人
+					<input type="radio"	id="category3" name="categoryId" value="3" th:checked="${categoryId}==3">その他
 				</td>
 			</tr>
 			<tr>
 				<th>タイトル</th>
-				<td><input type="text" name="title"></td>
+				<td><input type="text" name="title" th:value="${title}"></td>
 			</tr>
 			<tr>
 				<th>進捗状況</th>
-				<td><input type="radio" id="category1" name="progress" value="1">未着手
-					<input type="radio"	id="category2" name="progress" value="2">進行中
-					<input type="radio"	id="category3" name="progress" value="3">完了
+				<td><input type="radio" id="category1" name="progress" value="1" th:checked="${progress}==1">未着手
+					<input type="radio"	id="category2" name="progress" value="2" th:checked="${progress}==2">進行中
+					<input type="radio"	id="category3" name="progress" value="3" th:checked="${progress}==3">完了
 				</td>
 			</tr>
 			<tr>
 				<th>期限</th>
-				<td><input type="date" name="closingDate"></td>
+				<td><input type="date" name="closingDate" th:value="${closingDate}"></td>
 			</tr>
 			<tr>
 				<th>メモ</th>
-				<td><textarea name="memo" rows="10"></textarea></td>
+				<td><textarea name="memo" rows="10" th:text="${memo}"></textarea></td>
 			</tr>
 		</table>
 		<button>新規作成</button>

@@ -45,6 +45,7 @@
 				<th>進捗状況</th>
 				<th>メモ</th>
 				<th>削除</th>
+				<th>戻す</th>
 				</tr>
 				<tr th:each="task:${taskList}" th:if="${task.progress} == 3">
 					<td th:text="${task.id}"></td>
@@ -65,7 +66,11 @@
 						<form th:action="@{/tasks/{taskId}/delete(taskId=${task.id})}"method="post">
 							<button onclick="return deleteConfirm()">削除</button>
 						</form>
-						
+					</td>
+					<td>
+						<form th:action="@{/tasks/{taskId}/cancelComplete(taskId=${task.id})}"method="post">
+							<button>戻す</button>
+						</form>
 					</td>
 				</tr>
 			</table>

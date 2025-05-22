@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Tasks;
+import com.example.demo.entity.User;
 import com.example.demo.model.Account;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.TaskRepository;
+import com.example.demo.repository.UserRepository;
 
 @Controller
 public class TaskController {
@@ -29,6 +31,9 @@ public class TaskController {
 
 	@Autowired
 	TaskRepository taskRepository;
+
+	@Autowired
+	UserRepository userRepository;
 
 	@GetMapping("/tasks")
 	public String index(
@@ -75,6 +80,7 @@ public class TaskController {
 			taskList = taskRepository.findByUserIdAndTitleLike(account.getId(), "%" + keyword + "%");
 		}
 		model.addAttribute("taskList", taskList);
+		taskList.removeIf(t -> t.getProgress() == 2);
 
 		return "completeTask";
 	}
@@ -85,8 +91,17 @@ public class TaskController {
 		Tasks task = taskRepository.findById(id).get();
 		task.setProgress(3);
 		taskRepository.save(task);
-		model.addAttribute("task", task);
 		return "redirect:/tasks";
+	}
+
+	@PostMapping("/tasks/{id}/cancelComplete")
+	public String cancelComplete(
+			@PathVariable("id") Integer id,
+			Model model) {
+		Tasks task = taskRepository.findById(id).get();
+		task.setProgress(2);
+		taskRepository.save(task);
+		return "redirect:/tasks/complete";
 	}
 
 	@GetMapping("/tasks/createTask")
@@ -121,11 +136,67 @@ public class TaskController {
 			return "createTask";
 		}
 
-		Tasks taskList = new Tasks(categoryId, account.getId(), title, closingDate, progress, memo);
+		Tasks taskList = new Tasks(account.getId(), categoryId, title, closingDate, progress, memo);
 
 		taskRepository.save(taskList);
 
 		return "redirect:/tasks";
+	}
+
+	//共有タスク作成
+	@GetMapping("/tasks/createShareTask")
+	public String showCreateShareTask(Model model) {
+		List<User> users = userRepository.findByIdNot(account.getId());
+		model.addAttribute("users", users);
+		return "createShareTask";
+	}
+
+	@PostMapping("/tasks/createShareTask")
+	public String createShareTaskAdd(
+
+			@RequestParam(name = "userId", defaultValue = "") Integer userId,
+			@RequestParam(name = "categoryId", defaultValue = "99") Integer categoryId,
+			@RequestParam(name = "title", defaultValue = "") String title,
+			@RequestParam(name = "closingDate", defaultValue = "") LocalDate closingDate,
+			@RequestParam(name = "progress", defaultValue = "100") Integer progress,
+			@RequestParam(name = "memo", defaultValue = "") String memo,
+			Model model) {
+		List<String> errorList = new ArrayList<>();
+		if (categoryId == 99) {
+			errorList.add("カテゴリーを選択してください");
+		}
+		if (title.equals("")) {
+			errorList.add("タイトルが未入力です");
+		}
+		if (closingDate == null) {
+			errorList.add("期限が未入力です");
+		}
+		if (progress == 100) {
+			errorList.add("進捗状況が未入力です");
+		}
+		if (!errorList.isEmpty()) {
+			// usersを渡してあげる
+			List<User> users = userRepository.findByIdNot(account.getId());
+			model.addAttribute("users", users);
+			model.addAttribute("userId", userId);
+			model.addAttribute("categoryId", categoryId);
+			model.addAttribute("title", title);
+			model.addAttribute("closingDate", closingDate);
+			model.addAttribute("progress", progress);
+			model.addAttribute("memo", memo);
+
+			model.addAttribute("errorList", errorList);
+			return "createShareTask";
+		}
+
+		Tasks taskList = new Tasks(account.getId(), categoryId, title, closingDate, progress, memo);
+		taskRepository.save(taskList);
+
+		Tasks shareTaskList = new Tasks(userId, categoryId, title, closingDate, progress, memo);
+		taskRepository.save(shareTaskList);
+
+		return "redirect:/tasks";
+
 	}
 
 	//更新画面表示
