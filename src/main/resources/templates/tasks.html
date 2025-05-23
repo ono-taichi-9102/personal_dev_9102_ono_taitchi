@@ -15,20 +15,26 @@
 		}
 	</script>
 </head>
-<header th:replace="header"></header>
+<header>
+	<h1>ToDoリスト</h1>
+	<div>
+		[[${@account.name}]]さんがログイン中
+		<a href="/users/logout">ログアウト</a>
+	</div>
+</header>
 
-<a href="/tasks" class="button-51">全タスク</a>
-<a th:each="category:${categories}" th:href="@{/tasks(categoryId=${category.id})}" th:text="${category.name}"
-	style="margin-right: 5px;" class="button-51"></a>
-
-<a href="/tasks/complete" class="button-51">完了済み</a>
-
-<form action="/tasks" method="get">
-	<input type="text" name="keyword" placeholder="キーワード" th:value="${keyword}"> |
+<form action="/tasks" method="get" class="searchForm">
+		<input type="text" name="keyword" placeholder="キーワード" th:value="${keyword}">
 	<button>検索</button>
 </form>
-<a href="/tasks/createTask">新規作成</a>
-<a href="/tasks/createShareTask">共有タスク作成</a>
+カテゴリで絞り込み :
+	<a href="/tasks" class="button-51">全タスク</a>
+	<a th:each="category:${categories}" th:href="@{/tasks(categoryId=${category.id})}" th:text="${category.name}"
+		style="margin-right: 5px;" class="button-51"></a>
+	<a href="/tasks/complete" class="button-51">完了済み</a><br>
+	<a href="/tasks/createTask" class="button-1">個人タスク作成 ⊕</a>
+	<a href="/tasks/createShareTask" class="button-1">共有タスク作成 ⊕</a>
+	
 <table border="1">
 	<tr>
 		<th>NO</th>

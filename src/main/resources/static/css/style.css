@@ -2,14 +2,23 @@
 body{
 	background-color: #EFF0F7;
 	text-align: center;
-	min-width: 900px;
 }
+
+div{
+	position: absolute;
+	right: 0;
+	display: flex;
+	justify-content: end;
+	margin:10px;
+	margin-top: 30px;
+}
+
 .button-51 {
+	text-decoration: none;
     justify-content: space-around;
     position: relative;
     width: 200px;
-    margin: 0 auto;
-    padding: .9em 2em;
+    padding: .5em;
     border: none;
     border-bottom: 2px solid #e6edf3;
     background-color: transparent;
@@ -35,11 +44,25 @@ body{
     transform: scaleX(1);
 }
 
+.searchForm{
+	margin-top: 20px;
+	margin-bottom: 15px;
+	align-items: center;
+}
+
+input{
+	height: 20px;
+	align-items: center
+}
+
 header, nav, footer{
+	display: flex;
+	position: relative;
+	justify-content: center;
 	background-color: #45496a;
 	color:#ffffff;
 	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-bottom: 10px;
 }
 
 header a, nav a{
@@ -67,7 +90,7 @@ table, th, td{
 }
 
 table {
-	margin: 5px auto;
+	margin: 15px auto;
 	min-width: 800px;
 }
 
@@ -76,24 +99,30 @@ table th{
 	color: #ffffff;
 }
 
-button{
-	margin: 2px;
-	padding: 5px 20px;
-	background-color: #e5857b;
-	color: #ffffff;
-	border: none;
-	width:150px;
-	cursor: pointer;
-}
-
-button:hover {
-	background-color: #f1b2b2;
-}
-
 ul {
   list-style: none;
   padding-left:0;
 }
 li {
   list-style:none;
+}
+
+.button-1 {
+	display: inline-block;
+	text-decoration: none;
+    align-items: center;
+    width: 140px;
+    margin:15px;
+    padding: .9em 2em;
+    border: 2px solid #2589d0;
+    border-radius: 5px;
+    background-color: #dddddd;
+    color: #2589d0;
+    font-size: 1em;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.button-1:hover {
+	color: #f1b2b2;
 }

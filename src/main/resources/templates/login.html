@@ -6,15 +6,15 @@
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
-	<h1>ToDoリスト</h1>
+	<header><h1>ToDoリスト</h1></header>
 	<form action="/users/login" method="post">
 		<ul>
 			<li th:each="error:${errorList}" th:text="${error}"></li>
 		</ul>
 		<input type="text" name="name" placeholder="ユーザー名"><br>
 		<input type="text" name="password" placeholder="パスワード"><br>
-		<button>ログイン</button>
+		<button class="button-1">ログイン</button>
 	</form>
-	<a href="/users/create">ユーザー新規作成</a>
+	<a href="/users/create" class="button-1">ユーザー新規作成</a>
 </body>
 </html>
