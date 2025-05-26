@@ -38,11 +38,11 @@
 			<tr>
 				<th>進捗状況</th>
 				<td><input type="radio" id="category1" name="progress" value="1"
-					th:checked="${task.categoryId == 1}">未着手
+					th:checked="${task.progress == 1}">未着手
 					<input type="radio"	id="category2" name="progress" value="2"
-					th:checked="${categoryId == 2}">進行中
+					th:checked="${task.progress == 2}">進行中
 					<input type="radio"	id="category3" name="progress" value="3"
-					th:checked="${categoryId == 3}">完了
+					th:checked="${task.progress == 3}">完了
 				</td>
 			</tr>
 			<tr>
