@@ -61,6 +61,54 @@ public class TaskController {
 		return "tasks";
 	}
 
+	@GetMapping("/tasks/sortAsc")
+	public String sortAsc(
+			@RequestParam(name = "categoryId", defaultValue = "") Integer categoryId,
+			@RequestParam(name = "keyword", defaultValue = "") String keyword,
+			Model model) {
+
+		model.addAttribute("keyword", keyword);
+		List<Category> categoryList = categoryRepository.findAll();
+		model.addAttribute("categories", categoryList);
+
+		List<Tasks> taskList = null;
+		if (categoryId == null && keyword.equals("")) {
+			taskList = taskRepository.findByUserIdOrderByClosingDateAsc(account.getId());
+		} else {
+			taskList = taskRepository.findByUserIdAndCategoryIdOrderByClosingDateAsc(account.getId(), categoryId);
+		}
+		if (!(keyword.equals(""))) {
+			taskList = taskRepository.findByUserIdAndTitleLikeOrderByClosingDateAsc(account.getId(),
+					"%" + keyword + "%");
+		}
+		model.addAttribute("taskList", taskList);
+		return "tasks";
+	}
+
+	@GetMapping("/tasks/sortDesc")
+	public String sortDesc(
+			@RequestParam(name = "categoryId", defaultValue = "") Integer categoryId,
+			@RequestParam(name = "keyword", defaultValue = "") String keyword,
+			Model model) {
+
+		model.addAttribute("keyword", keyword);
+		List<Category> categoryList = categoryRepository.findAll();
+		model.addAttribute("categories", categoryList);
+
+		List<Tasks> taskList = null;
+		if (categoryId == null && keyword.equals("")) {
+			taskList = taskRepository.findByUserIdOrderByClosingDateDesc(account.getId());
+		} else {
+			taskList = taskRepository.findByUserIdAndCategoryIdOrderByClosingDateDesc(account.getId(), categoryId);
+		}
+		if (!(keyword.equals(""))) {
+			taskList = taskRepository.findByUserIdAndTitleLikeOrderByClosingDateDesc(account.getId(),
+					"%" + keyword + "%");
+		}
+		model.addAttribute("taskList", taskList);
+		return "tasks";
+	}
+
 	@GetMapping("/tasks/complete")
 	public String showcompleteTasks(
 			@RequestParam(name = "categoryId", defaultValue = "") Integer categoryId,
